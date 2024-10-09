@@ -114,6 +114,12 @@ namespace Gamekit2D
         //used in non alloc version of physic function
         protected ContactPoint2D[] m_ContactsBuffer = new ContactPoint2D[16];
 
+        // Added by Dakota
+        public Checkpoint LastCheckpoint
+        {
+            get { return m_LastCheckpoint; }
+        }
+
         // MonoBehaviour Messages - called by Unity internally.
         void Awake()
         {

@@ -46,5 +46,29 @@ namespace Gamekit2D
             if (!weaponPickupData.value2)
                 interactOnTrigger2D.enabled = false;
         }
+
+        public string[] SaveDataAsString()
+        {
+            Data<Sprite, bool, bool> data = (Data<Sprite, bool, bool>)SaveData();
+
+            Sprite sprite = data.value0;
+            
+            // TURN SPRITE INTO SPRITE REFERENCE
+            string spriteReference = string.Empty;
+
+            string[] output = { spriteReference, data.value1.ToString(), data.value2.ToString() };
+            return output;
+        }
+
+        public void LoadDataFromString(string[] stringData)
+        {
+            string spriteReference = stringData[0];
+
+            // GET SPRITE FROM SPRITE REFERENCE
+            Sprite sprite = spriteRenderer.sprite;
+
+            Data<Sprite, bool, bool> data = new Data<Sprite, bool, bool>(sprite, bool.Parse(stringData[1]), bool.Parse(stringData[2]));
+            LoadData(data);
+        }
     }
 }

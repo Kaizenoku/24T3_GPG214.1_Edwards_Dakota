@@ -70,6 +70,28 @@ namespace Gamekit2D
             dataSettings.persistenceType = persistenceType;
         }
 
+        public string[] SaveDataAsString()
+        {
+            Data<Sprite> data = (Data<Sprite>)SaveData();
 
+            Sprite sprite = data.value;
+
+            // TURN SPRITE INTO SPRITE REFERENCE
+            string spriteReference = string.Empty;
+
+            string[] output = { spriteReference };
+            return output;
+        }
+
+        public void LoadDataFromString(string[] stringData)
+        {
+            string spriteReference = stringData[0];
+
+            // GET SPRITE FROM SPRITE REFERENCE
+            Sprite sprite = m_SpriteRenderer.sprite;
+
+            Data<Sprite> data = new Data<Sprite>(sprite);
+            LoadData(data);
+        }
     }
 }

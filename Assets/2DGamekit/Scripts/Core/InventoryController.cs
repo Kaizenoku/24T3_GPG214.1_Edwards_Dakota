@@ -131,5 +131,33 @@ namespace Gamekit2D
                 AddItem(i);
             if (OnInventoryLoaded != null) OnInventoryLoaded();
         }
+
+        public string[] SaveDataAsString()
+        {
+            Data<HashSet<string>> data = (Data<HashSet<string>>)SaveData();
+            string[] output = new string[data.value.Count];
+
+            int i = 0;
+            foreach (var itemKey in data.value)
+            {
+                output[i] = itemKey;
+                i++;
+            }
+
+            return output;
+        }
+
+        public void LoadDataFromString(string[] stringData)
+        {
+            HashSet<string> itemKeys = new HashSet<string>();
+            
+            foreach (string itemKey in stringData)
+            {
+                itemKeys.Add(itemKey);
+            }
+
+            Data<HashSet<string>> data = new Data<HashSet<string>>(itemKeys);
+            LoadData(data);
+        }
     }
 }

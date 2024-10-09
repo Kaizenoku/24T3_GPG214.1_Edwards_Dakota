@@ -146,6 +146,19 @@ namespace Gamekit2D
                 RangedAttack.Disable();
         }
 
+        public string[] SaveDataAsString()
+        {
+            Data<bool, bool> data = (Data<bool, bool>)SaveData();
+            string[] output = { data.value0.ToString(), data.value1.ToString() };
+            return output;
+        }
+
+        public void LoadDataFromString(string[] stringData)
+        {
+            Data<bool, bool> data = new Data<bool, bool>(bool.Parse(stringData[0]), bool.Parse(stringData[1]));
+            LoadData(data);
+        }
+
         void OnGUI()
         {
             if (m_DebugMenuIsOpen)

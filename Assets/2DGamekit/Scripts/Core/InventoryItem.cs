@@ -85,5 +85,18 @@ namespace Gamekit2D
             Data<bool> inventoryItemData = (Data<bool>)data;
             gameObject.SetActive(inventoryItemData.value);
         }
+
+        public string[] SaveDataAsString()
+        {
+            Data<bool> data = (Data<bool>)SaveData();
+            string[] output = {data.value.ToString() };
+            return output;
+        }
+
+        public void LoadDataFromString(string[] stringData)
+        {
+            Data<bool> data = new Data<bool>(bool.Parse(stringData[0]));
+            LoadData(data);
+        }
     }
 }

@@ -12,7 +12,6 @@ namespace Gamekit2D
             DifferentZone, DifferentNonGameplayScene, SameScene,
         }
 
-
         public enum TransitionWhen
         {
             ExternalCall, InteractPressed, OnTriggerEnter,

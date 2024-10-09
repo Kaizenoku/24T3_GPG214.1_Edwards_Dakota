@@ -97,6 +97,19 @@ namespace Gamekit2D
             m_TotalSpawnedEnemyCount = enemyData.value;
         }
 
+        public string[] SaveDataAsString()
+        {
+            Data<int> data = (Data<int>)SaveData();
+            string[] output = { data.value.ToString() };
+            return output;
+        }
+
+        public void LoadDataFromString(string[] stringData)
+        {
+            Data<int> data = new Data<int>(int.Parse(stringData[0]));
+            LoadData(data);
+        }
+
         private void OnDrawGizmosSelected()
         {
             Gizmos.DrawWireCube(transform.position, new Vector3(spawnArea, 0.4f, 0));

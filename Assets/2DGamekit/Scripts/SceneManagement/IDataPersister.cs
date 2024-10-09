@@ -15,6 +15,10 @@ namespace Gamekit2D
         Data SaveData();
 
         void LoadData(Data data);
+
+        string[] SaveDataAsString();
+
+        void LoadDataFromString(string[] stringData);
     }
 
     [Serializable]

@@ -36,6 +36,12 @@ namespace Gamekit2D
         protected Dictionary<string, Data> m_Store = new Dictionary<string, Data>();
         event System.Action schedule = null;
 
+        // Added by Dakota
+        public HashSet<IDataPersister> DataPersisters
+        {
+            get { return m_DataPersisters; }
+        }
+
         void Update()
         {
             if (schedule != null)

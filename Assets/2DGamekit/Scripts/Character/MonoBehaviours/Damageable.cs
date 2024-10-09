@@ -163,6 +163,17 @@ namespace Gamekit2D
             OnHealthSet.Invoke(this);
         }
 
+        public string[] SaveDataAsString()
+        {
+            Data<int, bool> data = (Data<int, bool>)SaveData();
+            string[] output = {data.value0.ToString(), data.value1.ToString()};
+            return output;
+        }
 
+        public void LoadDataFromString(string[] stringData)
+        {
+            Data<int, bool> data = new Data<int, bool>(int.Parse(stringData[0]), bool.Parse(stringData[1]));
+            LoadData(data);
+        }
     }
 }

@@ -46,6 +46,12 @@ namespace Gamekit2D
 
         public SceneTransitionDestination initialSceneTransitionDestination;
 
+        // Variables added by Dakota
+        public string lastTransitionSceneName;
+        public bool lastTransitionResetInputValuesOnTransition;
+        public SceneTransitionDestination.DestinationTag lastTransitionDestinationTag;
+        public TransitionPoint.TransitionType lastTransitionType;
+
         protected Scene m_CurrentZoneScene;
         protected SceneTransitionDestination.DestinationTag m_ZoneRestartDestinationTag;
         protected PlayerInput m_PlayerInput;
@@ -97,6 +103,12 @@ namespace Gamekit2D
             Instance.StartCoroutine(Instance.Transition(transitionPoint.newSceneName, transitionPoint.resetInputValuesOnTransition, transitionPoint.transitionDestinationTag, transitionPoint.transitionType));
         }
 
+        // Overloaded method added by Dakota
+        public static void TransitionToScene(string newSceneName, bool resetInputValues, SceneTransitionDestination.DestinationTag destinationTag, TransitionPoint.TransitionType transitionType)
+        {
+            Instance.StartCoroutine(Instance.Transition(newSceneName, resetInputValues, destinationTag, transitionType));
+        }
+
         public static SceneTransitionDestination GetDestinationFromTag(SceneTransitionDestination.DestinationTag destinationTag)
         {
             return Instance.GetDestination(destinationTag);
@@ -105,6 +117,13 @@ namespace Gamekit2D
         protected IEnumerator Transition(string newSceneName, bool resetInputValues, SceneTransitionDestination.DestinationTag destinationTag, TransitionPoint.TransitionType transitionType = TransitionPoint.TransitionType.DifferentZone)
         {
             m_Transitioning = true;
+            
+            // Dakota added this...
+            lastTransitionSceneName = newSceneName;
+            lastTransitionResetInputValuesOnTransition = resetInputValues;
+            lastTransitionDestinationTag = destinationTag;
+            lastTransitionType = transitionType;
+            
             PersistentDataManager.SaveAllData();
 
             if (m_PlayerInput == null)
