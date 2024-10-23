@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.IO;
 
 namespace DakotaUtility
 {
@@ -13,7 +14,15 @@ namespace DakotaUtility
 
         private void Awake()
         {
-            LoadAsset(m_AssetFilePath);
+            if (File.Exists(m_AssetFilePath))
+            {
+                LoadAsset(m_AssetFilePath);
+            }
+            else
+            {
+                Debug.LogError(string.Format("File at [{0}] does not exist.", m_AssetFilePath));
+            }
+
         }
 
         // Overwritten by derived classes
