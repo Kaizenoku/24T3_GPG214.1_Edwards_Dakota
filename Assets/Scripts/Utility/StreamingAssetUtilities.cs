@@ -1,11 +1,13 @@
+using System;
 using System.IO;
 using UnityEngine;
 
-namespace DakotaUtility
+namespace DakotaLib
 {
     public static class StreamingAssetUtilities
     {
         private static string m_StreamingAssetsPath = Application.streamingAssetsPath;
+        public enum AudioBitDepth { Sixteen, TwentyFour, ThirtyTwo };
 
         /// <summary>
         /// Returns a Texture2D loaded from the file at the specified Streaming Assets path.
@@ -54,7 +56,7 @@ namespace DakotaUtility
         /// Requires a filepath (including file name) relative to the StreamingAssets folder.
         /// Do NOT include "Assets/StreamingAssets/".
         /// </param>
-        public static Sprite GetSpriteFromFile(string RelativeFilePath)
+        public static Sprite GetSpriteFromFile(string RelativeFilePath, int PixelsPerUnit = 256)
         {
             string fullFilePath = Path.Combine(m_StreamingAssetsPath, RelativeFilePath);
 
@@ -76,7 +78,7 @@ namespace DakotaUtility
             }
 
             // Create a new sprite using the texture width / height, and a centered pivot point
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), Vector2.zero);
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), PixelsPerUnit);
 
             // If sprite is null...
             if (sprite == null)
@@ -96,19 +98,23 @@ namespace DakotaUtility
         /// Requires a filepath (including file name) relative to the StreamingAssets folder.
         /// Do NOT include "Assets/StreamingAssets/".
         /// </param>
-        /// <param name="NumberOfChannels">
+        /// <param name="Channels">
         /// The number of audio channels (1 for mono, 2 for stereo, etc.).
-        /// Defaults to mono if not set.
+        /// Defaults to mono.
         /// </param>
         /// <param name="Frequency">
         /// The audio frequency (44100 for CD quality, 48000 for DVD quality, etc.).
-        /// Defaults to CD quality if not set.
+        /// Defaults to CD quality.
+        /// </param>
+        /// <param name="BitDepth">
+        /// The BitDepth of Audio File
+        /// Defaults to 16 bits.
         /// </param>
         /// <param name="StreamAudio">
         /// Whether or not to stream the audio in or load all at once.
-        /// Defaults to loading in all at once if not set.
+        /// Defaults to loading in all at once.
         /// </param>
-        public static AudioClip GetAudioClipFromFile(string RelativeFilePath, int NumberOfChannels = 1, int Frequency = 44100, bool StreamAudio = false)
+        public static AudioClip GetAudioClipFromFile(string RelativeFilePath, int Channels = 1, int Frequency = 44100, AudioBitDepth BitDepth = AudioBitDepth.Sixteen, bool StreamAudio = false)
         {
             string fullFilePath = Path.Combine(m_StreamingAssetsPath, RelativeFilePath);
 
@@ -122,22 +128,37 @@ namespace DakotaUtility
             // Get the bytes of the file
             byte[] fileBytes = File.ReadAllBytes(fullFilePath);
 
-            // Convert every two bytes (8 bits) into one 16-bit integer
-            float[] file16BitInts = new float[fileBytes.Length / 2];
-            for (int i = 0; i < file16BitInts.Length; i++)
+            int divider = 2;
+
+            switch (BitDepth)
+            {
+                case AudioBitDepth.Sixteen:
+                    divider = 2;
+                    break;
+                case AudioBitDepth.TwentyFour:
+                    divider = 3;
+                    break;
+                case AudioBitDepth.ThirtyTwo:
+                    divider = 4;
+                    break;
+            }
+
+            // Convert every 'divider' bytes (8 bits) into one 'divider * 8'-bit integer
+            float[] fileData = new float[fileBytes.Length / divider];
+            for (int i = 0; i < fileData.Length; i++)
             {
                 // Converting two bytes to a 16-bit integer
-                short bitValue = System.BitConverter.ToInt16(fileBytes, i * 2);
+                short bitValue = System.BitConverter.ToInt16(fileBytes, i * divider);
 
                 // Normalise the value
-                file16BitInts[i] = bitValue / 32768.0f;
+                fileData[i] = bitValue / 32768.0f;
             }
 
             string fileName = Path.GetFileName(fullFilePath);
 
             // Create our audio clip
-            AudioClip audioClip = AudioClip.Create(fileName, file16BitInts.Length, NumberOfChannels, Frequency, StreamAudio);
-            bool clipLoaded = audioClip.SetData(file16BitInts, 0);
+            AudioClip audioClip = AudioClip.Create(fileName, fileData.Length, Channels, Frequency, StreamAudio);
+            bool clipLoaded = audioClip.SetData(fileData, 0);
 
             // If clip didn't load successfully...
             if (!clipLoaded)

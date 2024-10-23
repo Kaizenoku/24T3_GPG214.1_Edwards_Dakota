@@ -1,6 +1,6 @@
 using UnityEditor;
 
-namespace DakotaUtility
+namespace DakotaLib
 {
     // Only apply to "StreamingAssetLoader" or derived classes
     [CustomEditor(typeof(StreamingAssetLoader), true)]
@@ -9,7 +9,7 @@ namespace DakotaUtility
         SerializedProperty assetFilePath;
         SerializedProperty streamingAsset;
 
-        private const string m_StreamingAssetPrefix = "Assets/StreamingAssets";
+        private const string m_StreamingAssetPrefix = "Assets/StreamingAssets/";
 
 
         void OnEnable()
@@ -20,9 +20,8 @@ namespace DakotaUtility
 
         public override void OnInspectorGUI()
         {
+            base.OnInspectorGUI();
             serializedObject.Update();
-            EditorGUILayout.PropertyField(streamingAsset);
-            EditorGUILayout.PropertyField(assetFilePath);
 
             if (streamingAsset.objectReferenceValue == null)
             {

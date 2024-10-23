@@ -1,9 +1,7 @@
-using System;
 using System.IO;
-using UnityEditor;
 using UnityEngine;
 
-namespace DakotaUtility
+namespace DakotaLib
 {
     public static class FileSystemUtilities
     {
@@ -119,44 +117,6 @@ namespace DakotaUtility
             {
                 //Debug.Log("Folder already exists at [" + directoryPath +"]");
             }
-        }
-    
-        // Opens a folder in the specified directory
-        public static void OpenFolder(string directoryPath)
-        {
-            // If directory path is blank or doesn't exist...
-            if (!IsPathValid(directoryPath))
-            {
-                //Debug.LogError("Invalid directory path!");
-                return;
-            }
-
-            // Open the folder in your operating system's file explorer
-            Application.OpenURL(directoryPath);
-        }
-
-        [MenuItem("File/Open data folder")]
-        public static void OpenDataFolder()
-        {
-            OpenFolder(dataPath);
-        }
-
-        [MenuItem("File/Open persistent data folder")]
-        public static void OpenPersistentDataFolder()
-        {
-            OpenFolder(persistentDataPath);
-        }
-
-        [MenuItem("File/Open streaming assets folder")]
-        public static void OpenStreamingAssetsFolder()
-        {
-            OpenFolder(streamingAssetsPath);
-        }
-
-        [MenuItem("File/Open temporary cache folder")]
-        public static void OpenTemporaryCacheFolder()
-        {
-            OpenFolder(temporaryCachePath);
         }
 
         // Returns a string with the combined filepath + filename

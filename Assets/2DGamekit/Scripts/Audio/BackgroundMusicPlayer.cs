@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DakotaLib;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
 using UnityEngine;
@@ -25,12 +26,24 @@ namespace Gamekit2D
 
         [Header("Music Settings")]
         public AudioClip musicAudioClip;
+        public bool loadMusicFromStreamingAssets;
+        [Tooltip("File path is relative to the StreamingAssetsFolder")]
+        public string streamingMusicFilePath = "Audio/MusicGameplay.wav";
+        public int streamingMusicChannels = 1;
+        public int streamingMusicFrequency = 44100;
+        public StreamingAssetUtilities.AudioBitDepth streamingMusicBitDepth = StreamingAssetUtilities.AudioBitDepth.Sixteen;
         public AudioMixerGroup musicOutput;
         public bool musicPlayOnAwake = true;
         [Range(0f, 1f)]
         public float musicVolume = 1f;
         [Header("Ambient Settings")]
         public AudioClip ambientAudioClip;
+        public bool loadAmbientFromStreamingAssets;
+        [Tooltip("File path is relative to the StreamingAssetsFolder")]
+        public string streamingAmbientFilePath = "Audio/EnvironmentalAmbience.wav";
+        public int streamingAmbientChannels = 1;
+        public int streamingAmbientFrequency = 44100;
+        public StreamingAssetUtilities.AudioBitDepth streamingAmbientBitDepth = StreamingAssetUtilities.AudioBitDepth.Sixteen;
         public AudioMixerGroup ambientOutput;
         public bool ambientPlayOnAwake = true;
         [Range(0f, 1f)]
@@ -48,6 +61,38 @@ namespace Gamekit2D
 
         void Awake ()
         {
+            // If set to load music from streaming assets...
+            if (loadMusicFromStreamingAssets)
+            {
+                // Get music clip from file...
+                AudioClip musicClip = StreamingAssetUtilities.GetAudioClipFromFile(
+                    streamingMusicFilePath,
+                    Channels: streamingMusicChannels,
+                    Frequency: streamingAmbientFrequency,
+                    BitDepth: streamingMusicBitDepth
+                );
+                if (musicClip != null)
+                {
+                    this.musicAudioClip = musicClip;
+                }
+            }
+
+            // If set to load ambience from streaming assets...
+            if (loadAmbientFromStreamingAssets)
+            {
+                // Get ambient clip from file...
+                AudioClip ambientClip = StreamingAssetUtilities.GetAudioClipFromFile(
+                    streamingAmbientFilePath,
+                    Channels: streamingAmbientChannels,
+                    Frequency: streamingAmbientFrequency,
+                    BitDepth: streamingAmbientBitDepth
+                );
+                if (ambientClip != null)
+                {
+                    this.ambientAudioClip = ambientClip;
+                }
+            }
+
             // If there's already a player...
             if (Instance != null && Instance != this)
             {

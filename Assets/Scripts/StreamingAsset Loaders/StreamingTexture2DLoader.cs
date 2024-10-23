@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace DakotaUtility
+namespace DakotaLib
 {
     // Requires a renderer to load the image into
     [RequireComponent(typeof(Renderer))]

@@ -1,16 +1,16 @@
 using UnityEngine;
 
-namespace DakotaUtility
+namespace DakotaLib
 {
     // Requires a sprite renderer to load the image into
-    [RequireComponent(typeof(SpriteRenderer))]
     public class StreamingSpriteLoader : StreamingAssetLoader
     {
         [SerializeField] private SpriteRenderer m_SpriteRenderer;
+        [SerializeField] private int m_PixelsPerUnit;
 
         protected override void Awake()
         {
-            // If no renderer provided...
+            // If no sprite renderer provided...
             if (m_SpriteRenderer == null)
             {
                 m_SpriteRenderer = GetComponent<SpriteRenderer>();
@@ -21,9 +21,9 @@ namespace DakotaUtility
 
         protected override void LoadAsset(string AssetFilePath)
         {
-            Sprite sprite = StreamingAssetUtilities.GetSpriteFromFile(AssetFilePath);
+            Sprite sprite = StreamingAssetUtilities.GetSpriteFromFile(AssetFilePath, PixelsPerUnit: m_PixelsPerUnit);
 
-            // If texture is null...
+            // If sprite is null...
             if (sprite == null)
             {
                 return;

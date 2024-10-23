@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace DakotaUtility
+namespace DakotaLib
 {
     // Abstract class that other "Loader" classes inherit from to load assets on Awake from "StreamingAssets" folder
     public abstract class StreamingAssetLoader : MonoBehaviour
