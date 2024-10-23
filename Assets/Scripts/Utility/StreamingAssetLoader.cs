@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.IO;
 
 namespace DakotaUtility
 {
@@ -12,17 +11,9 @@ namespace DakotaUtility
     #endif
         [SerializeField] protected string m_AssetFilePath;
 
-        private void Awake()
+        protected virtual void Awake()
         {
-            if (File.Exists(m_AssetFilePath))
-            {
-                LoadAsset(m_AssetFilePath);
-            }
-            else
-            {
-                Debug.LogError(string.Format("File at [{0}] does not exist.", m_AssetFilePath));
-            }
-
+            LoadAsset(m_AssetFilePath);
         }
 
         // Overwritten by derived classes
