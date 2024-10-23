@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DakotaUtility
 {
-    public static class FileSystemOperations
+    public static class FileSystemUtilities
     {
         public static string[] knownTextFileExtensions = new string[] { ".txt", ".json", ".xml"};
         private static string dataPath = Application.dataPath;

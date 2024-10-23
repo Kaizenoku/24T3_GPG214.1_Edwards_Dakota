@@ -97,14 +97,14 @@ namespace Project1
             // Used to check if all data was successfully saved
             //DebugSaveData(saveData);
 
-            saveFileName = FileSystemOperations.VerifyFileExtension(saveFileName, fileType);
+            saveFileName = FileSystemUtilities.VerifyFileExtension(saveFileName, fileType);
             string saveDataJSON = JsonUtility.ToJson(saveData);
 
             //Debug.Log("Contents: " + saveDataJSON);
             //Debug.Log("Save File Name: " + saveFileName);
             //Debug.Log("Save Folder Path: " + saveFolderPath);
             
-            FileSystemOperations.WriteTextFileContents(saveDataJSON, saveFolderPath, saveFileName);
+            FileSystemUtilities.WriteTextFileContents(saveDataJSON, saveFolderPath, saveFileName);
             
             //Debug.Log("Saving successful!");
         }
@@ -116,8 +116,8 @@ namespace Project1
         {
             //Debug.Log("Loading data...");
 
-            saveFileName = FileSystemOperations.VerifyFileExtension(saveFileName, fileType);
-            string saveDataJSON = FileSystemOperations.ReadTextFileContents(saveFolderPath, saveFileName);
+            saveFileName = FileSystemUtilities.VerifyFileExtension(saveFileName, fileType);
+            string saveDataJSON = FileSystemUtilities.ReadTextFileContents(saveFolderPath, saveFileName);
 
             saveData = JsonUtility.FromJson<SaveData>(saveDataJSON);
 
