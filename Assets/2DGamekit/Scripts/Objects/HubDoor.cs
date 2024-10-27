@@ -37,6 +37,18 @@ namespace Gamekit2D
             }
         }
 
+        void Awake()
+        {
+            if (characterInventory == null)
+            {
+                characterInventory = FindObjectOfType<InventoryController>();
+                if (characterInventory == null)
+                {
+                    Debug.LogError("Couldn't find player inventory!");
+                }
+            }
+        }
+        
         void OnEnable()
         {
             m_SpriteRenderer = GetComponent<SpriteRenderer>();

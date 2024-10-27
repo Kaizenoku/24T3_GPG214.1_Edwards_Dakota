@@ -23,6 +23,8 @@ public class PlayerLoader : StreamingAssetLoader
     [SerializeField] private List<string> m_DamagerHittableLayers = new List<string>();
 
     private PlayerInput m_PlayerInput;
+    private PlayerCharacter m_PlayerCharacter;
+    private Animator m_Animator;
 
     private void Awake()
     {
@@ -41,6 +43,8 @@ public class PlayerLoader : StreamingAssetLoader
         m_PlayerAssetBundle.Unload(false);
 
         m_PlayerInput = m_PlayerInstance.GetComponent<PlayerInput>();
+        m_PlayerCharacter = m_PlayerInstance.GetComponent<PlayerCharacter>();
+        m_Animator = m_PlayerInstance.GetComponent<Animator>();
 
         UpdateLight2D();
         UpdateDamager();
@@ -48,6 +52,7 @@ public class PlayerLoader : StreamingAssetLoader
         UpdateDirectorTriggers();
         UpdateTransitionPoints();
         UpdateTransitionDestinations();
+        UpdateCharacterStateSetters();
     }
 
     private void UpdateLight2D()
@@ -99,10 +104,10 @@ public class PlayerLoader : StreamingAssetLoader
     private void UpdateHealthUI()
     {
         HealthUI healthUI = FindObjectOfType<HealthUI>();
-        if (healthUI == null) return;
+        if (healthUI == null) { return; }
 
         Damageable playerDamageable = m_PlayerInstance.GetComponent<Damageable>();
-        if (playerDamageable == null) return;
+        if (playerDamageable == null) { return; }
 
         healthUI.representedDamageable = playerDamageable;
         playerDamageable.OnHealthSet.AddListener(healthUI.ChangeHitPointUI);
@@ -110,10 +115,10 @@ public class PlayerLoader : StreamingAssetLoader
 
     private void UpdateDirectorTriggers()
     {
-        if (m_PlayerInput == null) return;
-        
+        if (m_PlayerInput == null) { return; }
+
         DirectorTrigger[] cutsceneTriggers = FindObjectsOfType<DirectorTrigger>();
-        if (cutsceneTriggers.Length == 0) return;
+        if (cutsceneTriggers.Length == 0) { return; }
 
         foreach (DirectorTrigger cutscene in cutsceneTriggers)
         {
@@ -127,10 +132,32 @@ public class PlayerLoader : StreamingAssetLoader
         }
     }
 
+    private void UpdateCharacterStateSetters()
+    {
+        if (m_PlayerCharacter == null) { return; }
+        if (m_Animator == null) { return; }
+
+        CharacterStateSetter[] characterStateSetters = FindObjectsOfType<CharacterStateSetter>();
+        if (characterStateSetters.Length == 0) { return; }
+
+        foreach (CharacterStateSetter setter in characterStateSetters)
+        {
+            if (setter.playerCharacter == null)
+            {
+                setter.playerCharacter = m_PlayerCharacter;
+            }
+
+            if (setter.animator == null)
+            {
+                setter.animator = m_Animator;
+            }
+        }
+    }
+
     private void UpdateTransitionPoints()
     {
         TransitionPoint[] transitionPoints = FindObjectsOfType<TransitionPoint>();
-        if (transitionPoints.Length == 0) return;
+        if (transitionPoints.Length == 0) { return; }
 
         foreach (TransitionPoint point in transitionPoints)
         {
@@ -144,7 +171,7 @@ public class PlayerLoader : StreamingAssetLoader
     private void UpdateTransitionDestinations()
     {
         SceneTransitionDestination[] sceneTransitionDestinations = FindObjectsOfType<SceneTransitionDestination>();
-        if (sceneTransitionDestinations.Length == 0) return;
+        if (sceneTransitionDestinations.Length == 0) { return; }
 
         foreach (SceneTransitionDestination destination in sceneTransitionDestinations)
         {
