@@ -26,6 +26,7 @@ namespace Gamekit2D
 
         [Header("Music Settings")]
         public AudioClip musicAudioClip;
+        protected AudioClip streamingMusicAudioClip;
         public bool loadMusicFromStreamingAssets;
         [Tooltip("File path is relative to the StreamingAssetsFolder")]
         public string streamingMusicFilePath = "Audio/MusicGameplay.wav";
@@ -38,6 +39,7 @@ namespace Gamekit2D
         public float musicVolume = 1f;
         [Header("Ambient Settings")]
         public AudioClip ambientAudioClip;
+        protected AudioClip streamingAmbientAudioClip;
         public bool loadAmbientFromStreamingAssets;
         [Tooltip("File path is relative to the StreamingAssetsFolder")]
         public string streamingAmbientFilePath = "Audio/EnvironmentalAmbience.wav";
@@ -73,11 +75,11 @@ namespace Gamekit2D
                 );
                 if (musicClip != null)
                 {
-                    this.musicAudioClip = musicClip;
+                    streamingMusicAudioClip = musicClip;
                 }
             }
 
-            // If set to load ambience from streaming assets...
+            // If set to load ambient from streaming assets...
             if (loadAmbientFromStreamingAssets)
             {
                 // Get ambient clip from file...
@@ -89,21 +91,28 @@ namespace Gamekit2D
                 );
                 if (ambientClip != null)
                 {
-                    this.ambientAudioClip = ambientClip;
+                    streamingAmbientAudioClip = ambientClip;
                 }
             }
 
             // If there's already a player...
             if (Instance != null && Instance != this)
             {
-                //...if it use the same music clip, we set the audio source to be at the same position, so music don't restart
-                if(Instance.musicAudioClip == musicAudioClip)
+                if ((Instance.loadMusicFromStreamingAssets && loadMusicFromStreamingAssets) && (Instance.streamingMusicAudioClip == streamingMusicAudioClip))
                 {
                     m_TransferMusicTime = true;
                 }
-
-                //...if it use the same ambient clip, we set the audio source to be at the same position, so ambient don't restart
-                if (Instance.ambientAudioClip == ambientAudioClip)
+                //...if it use the same music clip, we set the audio source to be at the same position, so music don't restart
+                else if (Instance.musicAudioClip == musicAudioClip)
+                {
+                    m_TransferMusicTime = true;
+                }
+                if ((Instance.loadAmbientFromStreamingAssets && loadAmbientFromStreamingAssets) && (Instance.streamingAmbientAudioClip == streamingAmbientAudioClip))
+                {
+                    m_TransferAmbientTime = true;
+                }
+                //...if it use the same music clip, we set the audio source to be at the same position, so music don't restart
+                else if (Instance.ambientAudioClip == ambientAudioClip)
                 {
                     m_TransferAmbientTime = true;
                 }
@@ -117,7 +126,7 @@ namespace Gamekit2D
             DontDestroyOnLoad (gameObject);
 
             m_MusicAudioSource = gameObject.AddComponent<AudioSource> ();
-            m_MusicAudioSource.clip = musicAudioClip;
+            m_MusicAudioSource.clip = loadMusicFromStreamingAssets ? streamingMusicAudioClip : musicAudioClip;
             m_MusicAudioSource.outputAudioMixerGroup = musicOutput;
             m_MusicAudioSource.loop = true;
             m_MusicAudioSource.volume = musicVolume;
@@ -129,7 +138,7 @@ namespace Gamekit2D
             }
 
             m_AmbientAudioSource = gameObject.AddComponent<AudioSource>();
-            m_AmbientAudioSource.clip = ambientAudioClip;
+            m_AmbientAudioSource.clip = loadAmbientFromStreamingAssets ? streamingAmbientAudioClip : ambientAudioClip;
             m_AmbientAudioSource.outputAudioMixerGroup = ambientOutput;
             m_AmbientAudioSource.loop = true;
             m_AmbientAudioSource.volume = ambientVolume;

@@ -10,7 +10,7 @@ namespace DakotaLib
         [SerializeField] private int m_Frequency = 44100;
         [SerializeField] private StreamingAssetUtilities.AudioBitDepth m_BitDepth = StreamingAssetUtilities.AudioBitDepth.Sixteen;
 
-        protected override void Awake()
+        private void Awake()
         {
             // If no audio source provided...
             if (m_AudioSource == null)
@@ -18,13 +18,16 @@ namespace DakotaLib
                 m_AudioSource = GetComponent<AudioSource>();
             }
 
-            base.Awake();
+            if (m_AudioSource != null)
+            {
+                LoadAsset();
+            }
         }
 
-        protected override void LoadAsset(string AssetFilePath)
+        private void LoadAsset()
         {
             AudioClip audioClip = StreamingAssetUtilities.GetAudioClipFromFile(
-                AssetFilePath,
+                m_AssetFilePath,
                 Channels: m_Channels,
                 Frequency: m_Frequency,
                 BitDepth: m_BitDepth

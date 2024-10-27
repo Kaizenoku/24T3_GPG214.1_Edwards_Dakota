@@ -17,7 +17,15 @@ namespace Gamekit2D
         IEnumerator Start ()
         {
             if(representedDamageable == null)
-                yield break;
+            {
+                GameObject playerInstance = GameObject.FindWithTag("Player");
+                
+                if(playerInstance != null )
+                    representedDamageable = playerInstance.GetComponent<Damageable> ();
+
+                if (representedDamageable == null)
+                    yield break;
+            }
 
             yield return null;
             

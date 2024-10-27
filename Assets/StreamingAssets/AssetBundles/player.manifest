@@ -1,0 +1,150 @@
+ManifestFileVersion: 0
+CRC: 1172138292
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 13f9968adf999d7fe49f5d154407a49e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ec4a3f7a4e2b6cdd2c01cfaeea150ea5
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 13f9968adf999d7fe49f5d154407a49e
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 50
+  Script: {instanceID: 0}
+- Class: 61
+  Script: {instanceID: 0}
+- Class: 62
+  Script: {instanceID: 0}
+- Class: 70
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 81
+  Script: {instanceID: 0}
+- Class: 82
+  Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9891df1c6019032478f09d199b2badf8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: afc6a1ba6c8adcb4d9c0e1caceba8160, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: fab378b45c5c3df468bef1e509b10796, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c7bf68b2a1e6e4813b1d346963cdd0ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 960138f0450083543ad1d17e1352019d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 788fe546ad9bdbb45a6cc099f9f20e00, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6a5e192a35bc4444facdaa83aa946e1a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f228fbb363353454ca367fa9d85a2d98, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ffbd228a4d4e2ea48bb363a8a0b5e80d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 20f916c2dfd5f3b47bc8cf6ae8d8452e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: dea47b23c7b39f34595780a74aa5e6f0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b99f99b73068b844a9fe80e5dfda380f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: adc79483c0a4f324db07842e56543c1a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3c9e2a3a9e45dd0419bd2799583617f1, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 779e426f26210b146849be9b8e585133, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ea9dfe00ad5fa4db7857a85c2f5009f5, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c1506f7b67235554cb42519c257da979, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c748f4ea6548b2c4bbac77e314dcb718, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6abcd50fdc97f3e409820b29f208d704, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0b385d76d17e3ad40af19b1ee9fde4a2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 10e9ea67fbfeea244981d827aa6e40af, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: f9630ef9434df4048aafe7bffcc5bc1a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: aeecda2baef25704c8fe802e627e9f27, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: ffa803ba5afda31449bb92e48a33bcb6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 49de84fa3d321d245bc900e599de015f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6ddae9ef7d6cb2043a5a77f59a1d7314, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 241
+  Script: {instanceID: 0}
+- Class: 243
+  Script: {instanceID: 0}
+- Class: 245
+  Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: Gamekit2D.Damageable/DamageEvent
+- AssemblyName: Assembly-CSharp
+  ClassName: Gamekit2D.Damageable/HealEvent
+- AssemblyName: Assembly-CSharp
+  ClassName: Gamekit2D.Damageable/HealthEvent
+- AssemblyName: Assembly-CSharp
+  ClassName: Gamekit2D.Damager/DamagableEvent
+- AssemblyName: Assembly-CSharp
+  ClassName: Gamekit2D.Damager/NonDamagableEvent
+- AssemblyName: Assembly-CSharp
+  ClassName: Gamekit2D.DataSettings
+- AssemblyName: Assembly-CSharp
+  ClassName: Gamekit2D.InputComponent/InputAxis
+- AssemblyName: Assembly-CSharp
+  ClassName: Gamekit2D.InputComponent/InputButton
+- AssemblyName: Assembly-CSharp
+  ClassName: Gamekit2D.InventoryController/InventoryEvent
+- AssemblyName: Assembly-CSharp
+  ClassName: Gamekit2D.RandomAudioPlayer/TileOverride
+- AssemblyName: Unity.2D.Tilemap.Extras
+  ClassName: UnityEngine.RuleTile/TilingRule
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.ArgumentCache
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentListenerMode
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.UnityEvent
+Assets:
+- Assets/2DGamekit/Prefabs/Ellen.prefab
+Dependencies: []

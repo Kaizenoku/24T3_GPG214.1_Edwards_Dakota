@@ -8,7 +8,7 @@ namespace DakotaLib
     {
         [SerializeField] private Renderer m_Renderer;
         
-        protected override void Awake()
+        private void Awake()
         {
             // If no renderer provided...
             if (m_Renderer == null)
@@ -16,12 +16,15 @@ namespace DakotaLib
                 m_Renderer = GetComponent<Renderer>();
             }
 
-            base.Awake();
+            if (m_Renderer != null)
+            {
+                LoadAsset();
+            }
         }
 
-        protected override void LoadAsset(string AssetFilePath)
+        private void LoadAsset()
         {
-            Texture2D texture = StreamingAssetUtilities.Get2DTextureFromFile(AssetFilePath);
+            Texture2D texture = StreamingAssetUtilities.Get2DTextureFromFile(m_AssetFilePath);
 
             // If texture is null...
             if (texture == null)

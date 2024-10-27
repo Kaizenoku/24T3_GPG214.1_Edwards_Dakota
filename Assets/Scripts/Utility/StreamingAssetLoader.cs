@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace DakotaLib
 {
-    // Abstract class that other "Loader" classes inherit from to load assets on Awake from "StreamingAssets" folder
+    // Abstract class used to add Drag and Drop capabilities to add StreamingAsset filepaths
     public abstract class StreamingAssetLoader : MonoBehaviour
     {
     #if UNITY_EDITOR
@@ -10,13 +10,5 @@ namespace DakotaLib
         [SerializeField] protected Object m_StreamingAsset;
     #endif
         [SerializeField] protected string m_AssetFilePath;
-
-        protected virtual void Awake()
-        {
-            LoadAsset(m_AssetFilePath);
-        }
-
-        // Overwritten by derived classes
-        protected abstract void LoadAsset(string AssetFilePath);
     }
 }
