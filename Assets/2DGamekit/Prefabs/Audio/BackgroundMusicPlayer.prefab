@@ -47,9 +47,9 @@ MonoBehaviour:
   musicAudioClip: {fileID: 8300000, guid: 0651b56880a11ef45909b779443691aa, type: 3}
   loadMusicFromStreamingAssets: 1
   streamingMusicFilePath: Audio/MusicGameplay.wav
-  streamingMusicChannels: 1
+  streamingMusicChannels: 2
   streamingMusicFrequency: 44100
-  streamingMusicBitDepth: 2
+  streamingMusicBitDepth: 0
   musicOutput: {fileID: 243771002084737210, guid: 74cb2eead3628fa47a369c51a45d99a1,
     type: 2}
   musicPlayOnAwake: 1
@@ -57,9 +57,9 @@ MonoBehaviour:
   ambientAudioClip: {fileID: 8300000, guid: 3a9ba69f03694d44a9968f5b7c4abb1c, type: 3}
   loadAmbientFromStreamingAssets: 1
   streamingAmbientFilePath: Audio/EnvironmentalAmbience.wav
-  streamingAmbientChannels: 1
+  streamingAmbientChannels: 2
   streamingAmbientFrequency: 48000
-  streamingAmbientBitDepth: 2
+  streamingAmbientBitDepth: 0
   ambientOutput: {fileID: 243295666145841046, guid: 74cb2eead3628fa47a369c51a45d99a1,
     type: 2}
   ambientPlayOnAwake: 1

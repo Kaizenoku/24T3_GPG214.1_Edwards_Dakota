@@ -2,8 +2,6 @@ using UnityEngine;
 
 namespace DakotaLib
 {
-    // Requires a renderer to load the image into
-    [RequireComponent(typeof(Renderer))]
     public class StreamingTexture2DLoader : StreamingAssetLoader
     {
         [SerializeField] private Renderer m_Renderer;

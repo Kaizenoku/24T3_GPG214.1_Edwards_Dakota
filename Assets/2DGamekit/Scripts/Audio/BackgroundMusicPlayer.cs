@@ -70,7 +70,7 @@ namespace Gamekit2D
                 AudioClip musicClip = StreamingAssetUtilities.GetAudioClipFromFile(
                     streamingMusicFilePath,
                     Channels: streamingMusicChannels,
-                    Frequency: streamingAmbientFrequency,
+                    Frequency: streamingMusicFrequency,
                     BitDepth: streamingMusicBitDepth
                 );
                 if (musicClip != null)

@@ -141,21 +141,21 @@ namespace Gamekit2D
             //yield return new WaitForSecondsRealtime(1f);
 
             #region Debug SaveData
-            //Debug.Log(string.Format(
-            //    "Data Loaded\n" +
-            //    "Scene Name: [{0}]\n" +
-            //    "Scene ResetInputValues: [{1}]\n" +
-            //    "Scene Destination Tag: [{2}]\n" +
-            //    "Scene Transition Type: [{3}]\n" +
-            //    "Spawn Facing: [{4}]\n" +
-            //    "Spawn Location: [{5}]\n",
-            //    SaveData.sceneName,
-            //    SaveData.sceneResetInputValuesOnTransition,
-            //    SaveData.sceneTransitionDestinationTag,
-            //    SaveData.sceneTransitionType,
-            //    SaveData.spawnFacingLeft ? "left" : "right",
-            //    SaveData.spawnPosition.ToString()
-            //));
+            Debug.Log(string.Format(
+                "Data Loaded\n" +
+                "Scene Name: [{0}]\n" +
+                "Scene ResetInputValues: [{1}]\n" +
+                "Scene Destination Tag: [{2}]\n" +
+                "Scene Transition Type: [{3}]\n" +
+                "Spawn Facing: [{4}]\n" +
+                "Spawn Location: [{5}]\n",
+                SaveData.sceneName,
+                SaveData.sceneResetInputValuesOnTransition,
+                SaveData.sceneTransitionDestinationTag,
+                SaveData.sceneTransitionType,
+                SaveData.spawnFacingLeft ? "left" : "right",
+                SaveData.spawnPosition.ToString()
+            ));
 
             string debugOutput = "Saved Data Persisters!\n";
 

@@ -14,10 +14,9 @@ namespace Project1
     public class SaveSystem : MonoBehaviour
     {
 
-        [SerializeField] private string m_SaveFileName;
-        [SerializeField] private string m_SaveFolderPath;
-        private string m_DefaultFileName = "Project1 SaveData.json";
-        private string m_DefaultFolderPath = Application.streamingAssetsPath;
+        [SerializeField] private string m_SaveFileName = "Project1 SaveData";
+        [SerializeField] private string m_SaveFolderPath = Application.streamingAssetsPath;
+        private string m_SaveFileExtension = ".json";
         private SaveData m_SaveData = new SaveData();
         private bool loading = false;
         private SceneController m_SceneControllerInstance;
@@ -28,8 +27,6 @@ namespace Project1
         {
             // Setting default values
             m_Player = m_Player == null ? FindObjectOfType<PlayerCharacter>() : m_Player;
-            m_SaveFileName = string.IsNullOrEmpty(m_SaveFileName) ? m_DefaultFileName : m_SaveFileName;
-            m_SaveFolderPath = string.IsNullOrEmpty(m_SaveFolderPath) ? m_DefaultFolderPath : m_SaveFolderPath;
             m_SceneControllerInstance = SceneController.Instance;
         }
 
@@ -37,7 +34,7 @@ namespace Project1
         {
             if (loading) { return; }
 
-            if (m_SaveFileName == null)
+            if (m_SaveFileName == "")
             {
                 Debug.LogError("No save file name!");
                 return;
@@ -49,7 +46,7 @@ namespace Project1
                 Directory.CreateDirectory(m_SaveFolderPath);
             }
             
-            SaveGameToJSON(m_SaveFileName, m_SaveFolderPath);
+            SaveGameToJSON(Path.Combine(m_SaveFileName,m_SaveFileExtension), m_SaveFolderPath);
         }
 
         public void Load()
@@ -143,16 +140,5 @@ namespace Project1
             Debug.Log("Loading successful!");
             loading = false;
         }
-
-        //// UPDATE
-        //public void DebugDataPersisterData(IDataPersisterSaveData dpData)
-        //{
-
-        //}
-
-        // UPDATE
-        //public void DebugSaveData(SaveData saveData)
-        //{
-
     }
 }

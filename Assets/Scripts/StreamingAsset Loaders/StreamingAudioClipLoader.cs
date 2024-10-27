@@ -2,7 +2,6 @@ using UnityEngine;
 
 namespace DakotaLib
 {
-    // Requires an audio source to load the clip into
     public class StreamingAudioClipLoader : StreamingAssetLoader
     {
         [SerializeField] private AudioSource m_AudioSource;
