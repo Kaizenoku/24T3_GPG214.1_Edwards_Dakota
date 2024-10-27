@@ -8,6 +8,8 @@ namespace Gamekit2D
         public Damageable representedDamageable;
         public GameObject healthIconPrefab;
 
+        private GameObject playerInstance;
+
         protected Animator[] m_HealthIconAnimators;
 
         protected readonly int m_HashActivePara = Animator.StringToHash ("Active");
@@ -17,15 +19,7 @@ namespace Gamekit2D
         IEnumerator Start ()
         {
             if(representedDamageable == null)
-            {
-                GameObject playerInstance = GameObject.FindWithTag("Player");
-                
-                if(playerInstance != null )
-                    representedDamageable = playerInstance.GetComponent<Damageable> ();
-
-                if (representedDamageable == null)
-                    yield break;
-            }
+                yield break;
 
             yield return null;
             
