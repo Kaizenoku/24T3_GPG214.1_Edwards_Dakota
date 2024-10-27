@@ -1,57 +1,82 @@
 using DakotaLib;
 using Gamekit2D;
-using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static Gamekit2D.SceneTransitionDestination;
+using static Gamekit2D.TransitionPoint;
 
 namespace Project1
 {
-    // TODO, COMMENT! Eg. what does this actually save?
-    // TODO, add a debug log of previous values when loaded and new values?
-
-    // Might have to remove these "requires components" if we move data elsewhere
-    [RequireComponent(typeof(PlayerCharacter))]
     public class SaveSystem : MonoBehaviour
     {
 
-        [SerializeField] private string saveFileName;
-        [SerializeField] private string saveFolderPath;
-        private string defaultFileName = "Project1 SaveData";
-        private string defaultFolderPath = Application.streamingAssetsPath;
-        private string fileType = ".json";
-        private SaveData saveData = new SaveData();
+        [SerializeField] private string m_SaveFileName;
+        [SerializeField] private string m_SaveFolderPath;
+        private string m_DefaultFileName = "Project1 SaveData.json";
+        private string m_DefaultFolderPath = Application.streamingAssetsPath;
+        private SaveData m_SaveData = new SaveData();
+        private bool loading = false;
+        private SceneController m_SceneControllerInstance;
 
-        [SerializeField] private PlayerCharacter character;
+        [SerializeField] private PlayerCharacter m_Player;
 
         private void Start()
         {
             // Setting default values
-            character = character == null ? gameObject.GetComponent<PlayerCharacter>() : character;
-
-            saveFileName = string.IsNullOrEmpty(saveFileName) ? defaultFileName : saveFileName;
-            saveFolderPath = string.IsNullOrEmpty(saveFolderPath) ? defaultFolderPath : saveFolderPath;
-
-            //TODO add default "scene" stuff
+            m_Player = m_Player == null ? FindObjectOfType<PlayerCharacter>() : m_Player;
+            m_SaveFileName = string.IsNullOrEmpty(m_SaveFileName) ? m_DefaultFileName : m_SaveFileName;
+            m_SaveFolderPath = string.IsNullOrEmpty(m_SaveFolderPath) ? m_DefaultFolderPath : m_SaveFolderPath;
+            m_SceneControllerInstance = SceneController.Instance;
         }
 
-        // Currently only used for testing... add to DEBUG LOGGER thingy (see 2DGameKit references)
-        public void Update()
+        public void Save()
         {
-            if (Input.GetKeyDown(KeyCode.T))
+            if (loading) { return; }
+
+            if (m_SaveFileName == null)
             {
-                SaveGameToJSON(saveFileName, saveFolderPath);
+                Debug.LogError("No save file name!");
+                return;
             }
-            if (Input.GetKeyDown(KeyCode.L))
+
+            if (!Directory.Exists(m_SaveFolderPath))
             {
-                LoadGameFromJSON(saveFileName, saveFolderPath);
+                Debug.LogWarning(string.Format("[{0}] folder doesn't exist, creating new directory.", m_SaveFolderPath));
+                Directory.CreateDirectory(m_SaveFolderPath);
             }
+            
+            SaveGameToJSON(m_SaveFileName, m_SaveFolderPath);
+        }
+
+        public void Load()
+        {
+            if (loading) { return; }
+
+            if (!Directory.Exists(m_SaveFolderPath))
+            {
+                Debug.LogError(string.Format("Couldn't load data, no folder at [{0}]", m_SaveFolderPath));
+                return;
+            }
+
+            string combinedPath = Path.Combine(m_SaveFolderPath, m_SaveFileName);
+
+            if (!File.Exists(combinedPath))
+            {
+                Debug.LogError(string.Format("Couldn't load data, no file [{0}] in [{1}]. Remember to include a file extension, eg. '.json'", m_SaveFileName, m_SaveFolderPath));
+                return;
+            }
+
+            LoadGameFromJSON(m_SaveFileName, m_SaveFolderPath);
+            //StartCoroutine(LoadGameFromJSON(m_SaveFileName, m_SaveFolderPath));
         }
 
         // Saves the game to JSON
         // TODO, NEED TO ADD CHECKS FOR MISSING DATA...
-        public void SaveGameToJSON(string saveFileName, string saveFolderPath)
+        private void SaveGameToJSON(string saveFileName, string saveFolderPath)
         {
             //Debug.Log("Saving data...");
             PersistentDataManager.SaveAllData();
@@ -72,33 +97,26 @@ namespace Project1
                 i++;
             }
 
-            saveData.persisterSaveData = dpSaveData;
+            m_SaveData.persisterSaveData = dpSaveData;
 
             SceneController sc = SceneController.Instance;
 
-            saveData.sceneName = sc.lastTransitionSceneName;
-            saveData.sceneResetInputValuesOnTransition = sc.lastTransitionResetInputValuesOnTransition;
-            saveData.sceneTransitionDestinationTag = sc.lastTransitionDestinationTag;
-            saveData.sceneTransitionType = sc.lastTransitionType;
+            m_SaveData.sceneName = sc.lastTransitionSceneName;
+            m_SaveData.sceneResetInputValuesOnTransition = sc.lastTransitionResetInputValuesOnTransition;
+            m_SaveData.sceneTransitionDestinationTag = sc.lastTransitionDestinationTag;
+            m_SaveData.sceneTransitionType = sc.lastTransitionType;
 
-            // Used to check if the dpData was successfully saved
-            //foreach (var dp in saveData.persisterSaveData)
-            //{
-            //    DebugDataPersisterData(dp);
-            //}
-
-            if (character.LastCheckpoint != null)
+            if (m_Player.LastCheckpoint != null)
             {
-                Checkpoint lastCheckpoint = character.LastCheckpoint;
-                saveData.spawnFacingLeft = lastCheckpoint.respawnFacingLeft;
-                saveData.spawnPosition = lastCheckpoint.transform.position;
+                Checkpoint lastCheckpoint = m_Player.LastCheckpoint;
+                m_SaveData.spawnFacingLeft = lastCheckpoint.respawnFacingLeft;
+                m_SaveData.spawnPosition = lastCheckpoint.transform.position;
             }
 
             // Used to check if all data was successfully saved
             //DebugSaveData(saveData);
 
-            saveFileName = FileSystemUtilities.VerifyFileExtension(saveFileName, fileType);
-            string saveDataJSON = JsonUtility.ToJson(saveData);
+            string saveDataJSON = JsonUtility.ToJson(m_SaveData);
 
             //Debug.Log("Contents: " + saveDataJSON);
             //Debug.Log("Save File Name: " + saveFileName);
@@ -106,90 +124,35 @@ namespace Project1
             
             FileSystemUtilities.WriteTextFileContents(saveDataJSON, saveFolderPath, saveFileName);
             
-            //Debug.Log("Saving successful!");
+            Debug.Log("Saving successful!");
         }
 
         // Loads the game from JSON
         // TODO, NEED TO ADD CHECKS FOR MISSING DATA
-        // Maybe make this an IEnumerator
-        public void LoadGameFromJSON(string saveFileName, string saveFolderPath)
+        private void LoadGameFromJSON(string saveFileName, string saveFolderPath)
         {
-            //Debug.Log("Loading data...");
+            Debug.Log("Loading data...");
 
-            saveFileName = FileSystemUtilities.VerifyFileExtension(saveFileName, fileType);
+            loading = true;
+
             string saveDataJSON = FileSystemUtilities.ReadTextFileContents(saveFolderPath, saveFileName);
+            m_SaveData = JsonUtility.FromJson<SaveData>(saveDataJSON);
 
-            saveData = JsonUtility.FromJson<SaveData>(saveDataJSON);
+            StartCoroutine(m_SceneControllerInstance.TransitionSaveFile(m_SaveData, m_Player));
 
-            // Used to check if save data contents loaded from file correctly
-            //DebugSaveData(saveData);
-
-            SceneController.TransitionToScene(saveData.sceneName, saveData.sceneResetInputValuesOnTransition, saveData.sceneTransitionDestinationTag, saveData.sceneTransitionType);
-
-            // Have to wait for scene transition to finish before teleporting?
-            character.UpdateFacing(saveData.spawnFacingLeft);
-            GameObjectTeleporter.Teleport(character.gameObject, saveData.spawnPosition);
-
-            PersistentDataManager.ClearPersisters();
-
-            List<IDataPersister> dataPersistersInScene = new List<IDataPersister>(
-                FindObjectsOfType<MonoBehaviour>().OfType<IDataPersister>()
-            );
-
-            foreach (IDataPersisterSaveData dpSaveData in saveData.persisterSaveData)
-            {
-                foreach (var dpClass in dataPersistersInScene)
-                {
-                    if (dpClass.GetDataSettings().dataTag == dpSaveData.dataSettingsTag)
-                    {
-                        dpClass.SetDataSettings(dpSaveData.dataSettingsTag, dpSaveData.dataSettingsPersistenceType);
-
-                        dpClass.LoadDataFromString(dpSaveData.dataValues);
-
-                        PersistentDataManager.RegisterPersister(dpClass);
-
-                        dataPersistersInScene.Remove(dpClass);
-                        break;
-                    }
-                }
-            }
+            Debug.Log("Loading successful!");
+            loading = false;
         }
+
+        //// UPDATE
+        //public void DebugDataPersisterData(IDataPersisterSaveData dpData)
+        //{
+
+        //}
 
         // UPDATE
-        public void DebugDataPersisterData(IDataPersisterSaveData dpData)
-        {
-            Debug.Log(string.Format(
-                "Class Name: [{0}]\n" +
-                "Data Tag: [{1}]\n" +
-                "Data Persistence: [{2}]\n" +
-                "Data Values: [{3}]",
-                dpData.className,
-                dpData.dataSettingsTag,
-                dpData.dataSettingsPersistenceType,
-                string.Join(", ", dpData.dataValues)
-            ));
-        }
+        //public void DebugSaveData(SaveData saveData)
+        //{
 
-        // UPDATE
-        public void DebugSaveData(SaveData saveData)
-        {
-            string[] dpNames = new string[saveData.persisterSaveData.Length];
-
-            for (int i = 0; i < dpNames.Length; i++)
-            {
-                dpNames[i] = saveData.persisterSaveData[i].className;
-            }
-
-            Debug.Log(string.Format(
-                "Scene Name: [{0}]\n" +
-                "Spawn Facing: [{1}]\n" +
-                "Spawn Location: [{2}]\n" +
-                "Data Persistors: [{3}]",
-                saveData.sceneName,
-                saveData.spawnFacingLeft ? "left" : "right",
-                saveData.spawnPosition.ToString(),
-                string.Join(", ", dpNames)
-            ));
-        }
     }
 }

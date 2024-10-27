@@ -26731,7 +26731,7 @@ PrefabInstance:
     - target: {fileID: 114510199183654070, guid: f949db0cfd21cb34796d46f92ac4fb1a,
         type: 3}
       propertyPath: animatorStateName
-      value: Airborne
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 114510199183654070, guid: f949db0cfd21cb34796d46f92ac4fb1a,
         type: 3}
@@ -26746,7 +26746,7 @@ PrefabInstance:
     - target: {fileID: 114510199183654070, guid: f949db0cfd21cb34796d46f92ac4fb1a,
         type: 3}
       propertyPath: parameterSetters.Array.size
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114510199183654070, guid: f949db0cfd21cb34796d46f92ac4fb1a,
         type: 3}
@@ -34870,17 +34870,17 @@ PrefabInstance:
     - target: {fileID: 114634906093864604, guid: b38e9ca90e4033c4bb4554a41a283698,
         type: 3}
       propertyPath: inventoryCheck.inventoryItems.Array.data[0]
-      value: Key1
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 114634906093864604, guid: b38e9ca90e4033c4bb4554a41a283698,
         type: 3}
       propertyPath: inventoryCheck.inventoryItems.Array.data[1]
-      value: Key2
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 114634906093864604, guid: b38e9ca90e4033c4bb4554a41a283698,
         type: 3}
       propertyPath: inventoryCheck.inventoryItems.Array.data[2]
-      value: Key3
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 114634906093864604, guid: b38e9ca90e4033c4bb4554a41a283698,
         type: 3}

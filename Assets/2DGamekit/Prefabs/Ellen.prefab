@@ -169,7 +169,6 @@ GameObject:
   - component: {fileID: 114460243114916098}
   - component: {fileID: 114680495344679792}
   - component: {fileID: 114621962236214084}
-  - component: {fileID: 1507837085803641308}
   m_Layer: 13
   m_Name: Ellen
   m_TagString: Player
@@ -692,21 +691,6 @@ MonoBehaviour:
   dataSettings:
     dataTag: inventory
     persistenceType: 3
---- !u!114 &1507837085803641308
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1125256590603436}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ddae9ef7d6cb2043a5a77f59a1d7314, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  saveFileName: 
-  saveFolderPath: 
-  character: {fileID: 114854669915511232}
 --- !u!1 &1181578502863468
 GameObject:
   m_ObjectHideFlags: 0

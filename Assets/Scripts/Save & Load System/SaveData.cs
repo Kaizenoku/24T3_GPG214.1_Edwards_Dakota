@@ -8,7 +8,6 @@ using UnityEngine;
 // TODO COMMENT FILE
 namespace Project1
 {
-    // Using [Serializable] ability to save.
     // Using a class because variables aren't instantiated all at the same time.
     [Serializable] public class SaveData
     {
@@ -24,7 +23,6 @@ namespace Project1
         public SaveData() { }
     }
 
-    // Using [Serializable] ability to save.
     // Using a struct because variables are instantiated all at the same time.
     [Serializable] public struct IDataPersisterSaveData
     {

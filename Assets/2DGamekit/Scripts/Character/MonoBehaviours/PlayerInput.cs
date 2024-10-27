@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Project1;
+using UnityEngine;
 
 namespace Gamekit2D
 {
@@ -163,7 +164,7 @@ namespace Gamekit2D
         {
             if (m_DebugMenuIsOpen)
             {
-                const float height = 100;
+                const float height = 150;
 
                 GUILayout.BeginArea(new Rect(30, Screen.height - height, 200, height));
 
@@ -188,6 +189,25 @@ namespace Gamekit2D
                     else
                         RangedAttack.Disable();
                 }
+
+                SaveSystem saveSystem = FindObjectOfType<SaveSystem>();
+
+                if (GUILayout.Button("Save Game"))
+                {
+                    if (saveSystem != null)
+                    {
+                        saveSystem.Save();
+                    }
+                }
+
+                if (GUILayout.Button("Load Game"))
+                {
+                    if (saveSystem != null)
+                    {
+                        saveSystem.Load();
+                    }
+                }
+
                 GUILayout.EndVertical();
                 GUILayout.EndArea();
             }
