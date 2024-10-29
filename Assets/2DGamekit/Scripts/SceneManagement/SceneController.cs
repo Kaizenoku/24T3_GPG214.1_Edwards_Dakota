@@ -135,10 +135,15 @@ namespace Gamekit2D
 
             PersistentDataManager.ClearPersisters();
 
+            Debug.Log("Scene before load: " + SceneManager.GetActiveScene().name);
+
             SceneManager.LoadScene(SaveData.sceneName);
+            yield return new WaitForSecondsRealtime(1f);
+
             //yield return SceneManager.LoadSceneAsync(SaveData.sceneName);
 
-            //yield return new WaitForSecondsRealtime(1f);
+            Debug.Log("Scene after load: " + SceneManager.GetActiveScene().name);
+
 
             #region Debug SaveData
             Debug.Log(string.Format(

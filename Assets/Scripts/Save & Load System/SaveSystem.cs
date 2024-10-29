@@ -28,6 +28,7 @@ namespace Project1
             // Setting default values
             m_Player = m_Player == null ? FindObjectOfType<PlayerCharacter>() : m_Player;
             m_SceneControllerInstance = SceneController.Instance;
+            m_SaveFileName = FileSystemUtilities.VerifyFileExtension(m_SaveFileName, m_SaveFileExtension);
         }
 
         public void Save()
@@ -45,8 +46,8 @@ namespace Project1
                 Debug.LogWarning(string.Format("[{0}] folder doesn't exist, creating new directory.", m_SaveFolderPath));
                 Directory.CreateDirectory(m_SaveFolderPath);
             }
-            
-            SaveGameToJSON(Path.Combine(m_SaveFileName,m_SaveFileExtension), m_SaveFolderPath);
+
+            SaveGameToJSON(m_SaveFileName, m_SaveFolderPath);
         }
 
         public void Load()
