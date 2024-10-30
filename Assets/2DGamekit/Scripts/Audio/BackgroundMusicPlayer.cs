@@ -1,6 +1,7 @@
-﻿using System.Collections;
+﻿using DakotaLib;
+using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -25,12 +26,20 @@ namespace Gamekit2D
 
         [Header("Music Settings")]
         public AudioClip musicAudioClip;
+        protected AudioClip streamingMusicAudioClip;
+        public bool loadMusicFromStreamingAssets;
+        [Tooltip("File path is relative to the StreamingAssetsFolder")]
+        public string streamingMusicFilePath = "Audio/MusicGameplay.wav";
         public AudioMixerGroup musicOutput;
         public bool musicPlayOnAwake = true;
         [Range(0f, 1f)]
         public float musicVolume = 1f;
         [Header("Ambient Settings")]
         public AudioClip ambientAudioClip;
+        protected AudioClip streamingAmbientAudioClip;
+        public bool loadAmbientFromStreamingAssets;
+        [Tooltip("File path is relative to the StreamingAssetsFolder")]
+        public string streamingAmbientFilePath = "Audio/EnvironmentalAmbience.wav";
         public AudioMixerGroup ambientOutput;
         public bool ambientPlayOnAwake = true;
         [Range(0f, 1f)]
@@ -42,23 +51,62 @@ namespace Gamekit2D
         protected bool m_TransferMusicTime, m_TransferAmbientTime;
         protected BackgroundMusicPlayer m_OldInstanceToDestroy = null;
 
+        protected bool m_Initialising = false;
+        private AudioClip m_TempAudioClip = null;
+
         //every clip pushed on that stack throught "PushClip" function will play until completed, then pop
         //once that stack is empty, it revert to the musicAudioClip
         protected Stack<AudioClip> m_MusicStack = new Stack<AudioClip>();
 
         void Awake ()
         {
+            StartCoroutine(Initialise());
+        }
+
+        private IEnumerator Initialise()
+        {
+            m_Initialising = true;
+
+            // If set to load music from streaming assets...
+            if (loadMusicFromStreamingAssets)
+            {
+                // Get music clip from file...
+                string fullFilePath = Path.Combine(Application.streamingAssetsPath,streamingMusicFilePath);
+                yield return FileSystemUtilities.GetAudioClipFromFileAsync(OnStreamingAudioClipLoaded, fullFilePath);
+
+
+                if (m_TempAudioClip != null)
+                {
+                    streamingMusicAudioClip = m_TempAudioClip;
+                    m_TempAudioClip = null;
+                }
+            }
+
+            // If set to load ambient from streaming assets...
+            if (loadAmbientFromStreamingAssets)
+            {
+                // Get ambient clip from file...
+                string fullFilePath = Path.Combine(Application.streamingAssetsPath, streamingAmbientFilePath);
+                yield return FileSystemUtilities.GetAudioClipFromFileAsync(OnStreamingAudioClipLoaded, fullFilePath);
+
+                if (m_TempAudioClip != null)
+                {
+                    streamingAmbientAudioClip = m_TempAudioClip;
+                    m_TempAudioClip = null;
+                }
+            }
+
+            yield return null;
             // If there's already a player...
             if (Instance != null && Instance != this)
             {
                 //...if it use the same music clip, we set the audio source to be at the same position, so music don't restart
-                if(Instance.musicAudioClip == musicAudioClip)
+                if (Instance.musicAudioClip == musicAudioClip)
                 {
                     m_TransferMusicTime = true;
                 }
-
-                //...if it use the same ambient clip, we set the audio source to be at the same position, so ambient don't restart
-                if (Instance.ambientAudioClip == ambientAudioClip)
+                //...if it use the same ambient clip, we set the audio source to be at the same position, so music don't restart
+                else if (Instance.ambientAudioClip == ambientAudioClip)
                 {
                     m_TransferAmbientTime = true;
                 }
@@ -66,13 +114,13 @@ namespace Gamekit2D
                 // ... destroy the pre-existing player.
                 m_OldInstanceToDestroy = Instance;
             }
-        
+
             s_Instance = this;
 
-            DontDestroyOnLoad (gameObject);
+            DontDestroyOnLoad(gameObject);
 
-            m_MusicAudioSource = gameObject.AddComponent<AudioSource> ();
-            m_MusicAudioSource.clip = musicAudioClip;
+            m_MusicAudioSource = gameObject.AddComponent<AudioSource>();
+            m_MusicAudioSource.clip = loadMusicFromStreamingAssets ? streamingMusicAudioClip : musicAudioClip;
             m_MusicAudioSource.outputAudioMixerGroup = musicOutput;
             m_MusicAudioSource.loop = true;
             m_MusicAudioSource.volume = musicVolume;
@@ -84,20 +132,19 @@ namespace Gamekit2D
             }
 
             m_AmbientAudioSource = gameObject.AddComponent<AudioSource>();
-            m_AmbientAudioSource.clip = ambientAudioClip;
+            m_AmbientAudioSource.clip = loadAmbientFromStreamingAssets ? streamingAmbientAudioClip : ambientAudioClip;
             m_AmbientAudioSource.outputAudioMixerGroup = ambientOutput;
             m_AmbientAudioSource.loop = true;
             m_AmbientAudioSource.volume = ambientVolume;
-
+           
             if (ambientPlayOnAwake)
             {
                 m_AmbientAudioSource.time = 0f;
                 m_AmbientAudioSource.Play();
             }
-        }
 
-        private void Start()
-        {
+            yield return null;
+
             //if delete & trasnfer time only in Start so we avoid the small gap that doing everything at the same time in Awake would create 
             if (m_OldInstanceToDestroy != null)
             {
@@ -106,10 +153,18 @@ namespace Gamekit2D
                 m_OldInstanceToDestroy.Stop();
                 Destroy(m_OldInstanceToDestroy.gameObject);
             }
+
+            m_Initialising = false;
+        }
+
+        private void OnStreamingAudioClipLoaded(AudioClip AudioClip)
+        {
+            m_TempAudioClip = AudioClip;
         }
 
         private void Update()
         {
+            if (m_Initialising) { return; }
             if(m_MusicStack.Count > 0)
             {
                 //isPlaying will be false once the current clip end up playing

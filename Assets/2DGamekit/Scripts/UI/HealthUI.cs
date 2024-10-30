@@ -8,6 +8,8 @@ namespace Gamekit2D
         public Damageable representedDamageable;
         public GameObject healthIconPrefab;
 
+        private GameObject playerInstance;
+
         protected Animator[] m_HealthIconAnimators;
 
         protected readonly int m_HashActivePara = Animator.StringToHash ("Active");

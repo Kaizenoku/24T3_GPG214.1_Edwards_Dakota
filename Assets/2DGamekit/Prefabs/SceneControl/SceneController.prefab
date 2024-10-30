@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4111754083754678}
   - component: {fileID: 114375775778562426}
   - component: {fileID: 114530514095965652}
+  - component: {fileID: 1576137331793291313}
   m_Layer: 0
   m_Name: SceneController
   m_TagString: Untagged
@@ -46,6 +47,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialSceneTransitionDestination: {fileID: 0}
+  lastTransitionSceneName: 
+  lastTransitionResetInputValuesOnTransition: 0
+  lastTransitionDestinationTag: 0
+  lastTransitionType: 0
 --- !u!114 &114530514095965652
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,3 +63,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aebaf3cf1884d384da371c728483509b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1576137331793291313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030672202321082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ddae9ef7d6cb2043a5a77f59a1d7314, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SaveFileName: Project1 SaveData
+  m_SaveFolderPath: D:/Game Dev/Repositories/24T3_GPG214.1_Edwards_Dakota/Assets/StreamingAssets
+  m_Player: {fileID: 0}
