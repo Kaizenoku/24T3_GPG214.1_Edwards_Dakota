@@ -24,11 +24,11 @@ namespace DakotaLib
 
         public override IEnumerator LoadAssetAsync()
         {
-            coroutineRunning = true;
+            assetLoading = true;
 
-            yield return FileSystemUtilities.GetSpriteFromFileAsync(OnAssetLoaded, m_AssetFilePath);
+            yield return FileSystemUtilities.GetSpriteFromFileAsync(OnAssetLoaded, m_AssetFilePath, m_PixelsPerUnit);
 
-            coroutineRunning = false;
+            assetLoading = false;
         }
 
         protected override void OnAssetLoaded(Sprite Sprite)

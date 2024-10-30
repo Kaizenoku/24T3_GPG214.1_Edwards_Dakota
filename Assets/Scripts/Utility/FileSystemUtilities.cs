@@ -85,7 +85,7 @@ namespace DakotaLib
         }
 
         // Returns a Sprite from a file
-        public static Sprite GetSpriteFromFile(string FilePath, int PixelsPerUnit = 100)
+        public static Sprite GetSpriteFromFile(string FilePath, int PixelsPerUnit)
         {
             // If file doesn't exist...
             if (!File.Exists(FilePath))
@@ -287,7 +287,7 @@ namespace DakotaLib
         }
 
         // Asynchronously returns a Sprite from a file on the computer or uploaded to the web
-        public static IEnumerator GetSpriteFromFileAsync(System.Action<Sprite> Callback, string FileAddress, int PixelsPerUnit = 100)
+        public static IEnumerator GetSpriteFromFileAsync(System.Action<Sprite> Callback, string FileAddress, int PixelsPerUnit)
         {
             // If file doesn't exist...
             if (!File.Exists(FileAddress))

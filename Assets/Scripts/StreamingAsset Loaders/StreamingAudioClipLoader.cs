@@ -36,11 +36,11 @@ namespace DakotaLib
         
         public override IEnumerator LoadAssetAsync()
         {
-            coroutineRunning = true;
+            assetLoading = true;
 
             yield return FileSystemUtilities.GetAudioClipFromFileAsync(OnAssetLoaded, m_AssetFilePath);
 
-            coroutineRunning = false;
+            assetLoading = false;
         }
 
         protected override void OnAssetLoaded(AudioClip AudioClip)

@@ -23,11 +23,11 @@ namespace DakotaLib
 
         public override IEnumerator LoadAssetAsync()
         {
-            coroutineRunning = true;
+            assetLoading = true;
 
             yield return FileSystemUtilities.GetTexture2DFromFileAsync(OnAssetLoaded, m_AssetFilePath);
 
-            coroutineRunning = false;
+            assetLoading = false;
         }
 
         protected override void OnAssetLoaded(Texture2D Texture)

@@ -17,7 +17,7 @@ namespace DakotaLib
         [SerializeField] protected bool m_LoadOnAwake = true;
         [SerializeField] protected bool m_LoadAsynchronously = false;
 
-        [HideInInspector] public bool coroutineRunning;
+        [HideInInspector] public bool assetLoading;
 
         public abstract void LoadAsset();
         public abstract IEnumerator LoadAssetAsync();
@@ -40,7 +40,7 @@ namespace DakotaLib
             }
             else
             {
-                if (!coroutineRunning)
+                if (!assetLoading)
                 {
                     StartCoroutine(LoadAssetAsync());
                 }
