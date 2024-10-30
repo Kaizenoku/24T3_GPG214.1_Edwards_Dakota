@@ -1,7 +1,7 @@
 ﻿using DakotaLib;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -57,17 +57,30 @@ namespace Gamekit2D
         protected bool m_TransferMusicTime, m_TransferAmbientTime;
         protected BackgroundMusicPlayer m_OldInstanceToDestroy = null;
 
+        protected bool m_Initialising = false;
+
         //every clip pushed on that stack throught "PushClip" function will play until completed, then pop
         //once that stack is empty, it revert to the musicAudioClip
         protected Stack<AudioClip> m_MusicStack = new Stack<AudioClip>();
 
         void Awake ()
         {
+            if (m_Initialising) { return; }
+            StartCoroutine(Initialise());
+        }
+
+        private IEnumerator Initialise()
+        {
+            m_Initialising = true;
+
             // If set to load music from streaming assets...
             if (loadMusicFromStreamingAssets)
             {
                 // Get music clip from file...
-                AudioClip musicClip = StreamingAssetUtilities.GetAudioClipFromFile(
+                yield return FileSystemUtilities.GetAudioClipFromFile(Path.Combine(Application.streamingAssetsPath, streamingAmbientFilePath));
+
+
+                AudioClip musicClip = StreamingAssetUtilities.GetAudioClipFromStreamingAssets(
                     streamingMusicFilePath,
                     Channels: streamingMusicChannels,
                     Frequency: streamingMusicFrequency,
@@ -83,7 +96,7 @@ namespace Gamekit2D
             if (loadAmbientFromStreamingAssets)
             {
                 // Get ambient clip from file...
-                AudioClip ambientClip = StreamingAssetUtilities.GetAudioClipFromFile(
+                AudioClip ambientClip = StreamingAssetUtilities.GetAudioClipFromStreamingAssets(
                     streamingAmbientFilePath,
                     Channels: streamingAmbientChannels,
                     Frequency: streamingAmbientFrequency,
@@ -120,12 +133,12 @@ namespace Gamekit2D
                 // ... destroy the pre-existing player.
                 m_OldInstanceToDestroy = Instance;
             }
-        
+
             s_Instance = this;
 
-            DontDestroyOnLoad (gameObject);
+            DontDestroyOnLoad(gameObject);
 
-            m_MusicAudioSource = gameObject.AddComponent<AudioSource> ();
+            m_MusicAudioSource = gameObject.AddComponent<AudioSource>();
             m_MusicAudioSource.clip = loadMusicFromStreamingAssets ? streamingMusicAudioClip : musicAudioClip;
             m_MusicAudioSource.outputAudioMixerGroup = musicOutput;
             m_MusicAudioSource.loop = true;
@@ -148,10 +161,9 @@ namespace Gamekit2D
                 m_AmbientAudioSource.time = 0f;
                 m_AmbientAudioSource.Play();
             }
-        }
 
-        private void Start()
-        {
+            yield return null;
+
             //if delete & trasnfer time only in Start so we avoid the small gap that doing everything at the same time in Awake would create 
             if (m_OldInstanceToDestroy != null)
             {
@@ -160,6 +172,8 @@ namespace Gamekit2D
                 m_OldInstanceToDestroy.Stop();
                 Destroy(m_OldInstanceToDestroy.gameObject);
             }
+
+            m_Initialising = false;
         }
 
         private void Update()

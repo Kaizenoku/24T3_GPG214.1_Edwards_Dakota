@@ -1,6 +1,8 @@
 using System;
+using System.Collections;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace DakotaLib
 {
@@ -8,87 +10,6 @@ namespace DakotaLib
     {
         private static string m_StreamingAssetsPath = Application.streamingAssetsPath;
         public enum AudioBitDepth { Sixteen, TwentyFour, ThirtyTwo };
-
-        /// <summary>
-        /// Returns a Texture2D loaded from the file at the specified Streaming Assets path.
-        /// If no valid file, returns null.
-        /// </summary>
-        /// <param name="RelativeFilePath">
-        /// Requires a filepath (including file name) relative to the StreamingAssets folder.
-        /// Do NOT include "Assets/StreamingAssets/".
-        /// </param>
-        public static Texture2D Get2DTextureFromFile(string RelativeFilePath)
-        {
-            string fullFilePath = Path.Combine(m_StreamingAssetsPath, RelativeFilePath);
-
-            // If file doesn't exist...
-            if (!File.Exists(fullFilePath))
-            {
-                Debug.LogError(string.Format("File at [{0}] does not exist.", fullFilePath));
-                return null;
-            }
-
-            // Get the bytes of the file
-            byte[] fileBytes = File.ReadAllBytes(fullFilePath);
-
-            // Create a blank texture
-            Texture2D texture = new Texture2D(0,0);
-
-            // Turn byte data into image
-            bool imageLoaded = texture.LoadImage(fileBytes);
-
-            // If image didn't load successfully...
-            if (!imageLoaded)
-            {
-                Debug.LogError(string.Format("File at [{0}] is not a valid image.", fullFilePath));
-                return null;
-            }
-
-            return texture;
-        }
-
-        /// <summary>
-        /// Returns a Sprite loaded from the file at the specified Streaming Assets path.
-        /// If no valid file, returns null.
-        /// Note, the sprite has a centered pivot point
-        /// </summary>
-        /// <param name="RelativeFilePath">
-        /// Requires a filepath (including file name) relative to the StreamingAssets folder.
-        /// Do NOT include "Assets/StreamingAssets/".
-        /// </param>
-        public static Sprite GetSpriteFromFile(string RelativeFilePath, int PixelsPerUnit = 256)
-        {
-            string fullFilePath = Path.Combine(m_StreamingAssetsPath, RelativeFilePath);
-
-            // If file doesn't exist...
-            if (!File.Exists(fullFilePath))
-            {
-                Debug.LogError(string.Format("File at [{0}] does not exist.", fullFilePath));
-                return null;
-            }
-
-            // Get texture from file
-            Texture2D texture = Get2DTextureFromFile(fullFilePath);
-
-            // If texture is null...
-            if (texture == null)
-            {
-                Debug.LogError(string.Format("File at [{0}] is not a valid image.", fullFilePath));
-                return null;
-            }
-
-            // Create a new sprite using the texture width / height, and a centered pivot point
-            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f), PixelsPerUnit);
-
-            // If sprite is null...
-            if (sprite == null)
-            {
-                Debug.LogError(string.Format("File at [{0}] is not a valid image.", fullFilePath));
-                return null;
-            }
-
-            return sprite;
-        }
 
         /// <summary>
         /// Returns an AudioClip loaded from the file at the specified Streaming Assets path.
@@ -114,7 +35,7 @@ namespace DakotaLib
         /// Whether or not to stream the audio in or load all at once.
         /// Defaults to loading in all at once.
         /// </param>
-        public static AudioClip GetAudioClipFromFile(string RelativeFilePath, int Channels = 1, int Frequency = 44100, AudioBitDepth BitDepth = AudioBitDepth.Sixteen, bool StreamAudio = false)
+        public static AudioClip GetAudioClipFromStreamingAssets(string RelativeFilePath, int Channels = 1, int Frequency = 44100, AudioBitDepth BitDepth = AudioBitDepth.Sixteen, bool StreamAudio = false)
         {
             string fullFilePath = Path.Combine(m_StreamingAssetsPath, RelativeFilePath);
 
@@ -170,36 +91,5 @@ namespace DakotaLib
             return audioClip;
         }
 
-        /// <summary>
-        /// Returns an Asset Bundle loaded from the file at the specified Streaming Assets path.
-        /// If no valid file, returns null.
-        /// </summary>
-        /// <param name="RelativeFilePath">
-        /// Requires a filepath (including file name) relative to the StreamingAssets folder.
-        /// Do NOT include "Assets/StreamingAssets/".
-        /// </param>
-        public static AssetBundle GetAssetBundleFromFile(string RelativeFilePath)
-        {
-            string fullFilePath = Path.Combine(m_StreamingAssetsPath, RelativeFilePath);
-
-            // If file doesn't exist...
-            if (!File.Exists(fullFilePath))
-            {
-                Debug.LogError(string.Format("File at [{0}] does not exist.", fullFilePath));
-                return null;
-            }
-
-            // Load asset bundle
-            AssetBundle assetBundle = AssetBundle.LoadFromFile(fullFilePath);
-
-            // If asset bundle didn't load successfully...
-            if (assetBundle == null)
-            {
-                Debug.LogError(string.Format("File at [{0}] is not a valid Asset Bundle.", fullFilePath));
-                return null;
-            }
-
-            return assetBundle;
-        }
     }
 }

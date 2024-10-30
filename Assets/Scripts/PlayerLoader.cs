@@ -1,13 +1,18 @@
 using DakotaLib;
 using Gamekit2D;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 [DefaultExecutionOrder(-5)]
-public class PlayerLoader : StreamingAssetLoader
+public class PlayerLoader: MonoBehaviour
 {
-    private string m_PlayerAssetName = "Ellen";
+    [SerializeField] private string m_AssetBundleName = "player";
+    [SerializeField] private string m_RelativeAssetBundlePath = "AssetBundles";
+    [SerializeField] private string m_PlayerAssetName = "Ellen";
+    private string m_FullFilePath;
+
     private AssetBundle m_PlayerAssetBundle;
     private GameObject m_PlayerPrefab;
     private GameObject m_PlayerInstance;
@@ -26,9 +31,16 @@ public class PlayerLoader : StreamingAssetLoader
     private PlayerCharacter m_PlayerCharacter;
     private Animator m_Animator;
 
-    private void Awake()
+    protected void Awake()
     {
-        m_PlayerAssetBundle = StreamingAssetUtilities.GetAssetBundleFromFile(m_AssetFilePath);
+        m_FullFilePath = Path.Combine(Application.streamingAssetsPath, m_RelativeAssetBundlePath, m_AssetBundleName);
+        
+        LoadPlayer();
+    }
+    
+    private void LoadPlayer()
+    {
+        m_PlayerAssetBundle = FileSystemUtilities.GetAssetBundleFromFile(m_FullFilePath);
         if (m_PlayerAssetBundle == null) return;
 
         m_PlayerPrefab = m_PlayerAssetBundle.LoadAsset<GameObject>(m_PlayerAssetName);

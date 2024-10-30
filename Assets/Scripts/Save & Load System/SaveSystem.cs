@@ -16,10 +16,12 @@ namespace Project1
 
         [SerializeField] private string m_SaveFileName = "Project1 SaveData";
         [SerializeField] private string m_SaveFolderPath = Application.streamingAssetsPath;
+        private string m_SaveFilePath;
         private string m_SaveFileExtension = ".json";
         private SaveData m_SaveData = new SaveData();
         private bool loading = false;
         private SceneController m_SceneControllerInstance;
+
 
         [SerializeField] private PlayerCharacter m_Player;
 
@@ -29,6 +31,7 @@ namespace Project1
             m_Player = m_Player == null ? FindObjectOfType<PlayerCharacter>() : m_Player;
             m_SceneControllerInstance = SceneController.Instance;
             m_SaveFileName = FileSystemUtilities.VerifyFileExtension(m_SaveFileName, m_SaveFileExtension);
+            m_SaveFilePath = Path.Combine(m_SaveFolderPath, m_SaveFileName);
         }
 
         public void Save()
@@ -119,8 +122,8 @@ namespace Project1
             //Debug.Log("Contents: " + saveDataJSON);
             //Debug.Log("Save File Name: " + saveFileName);
             //Debug.Log("Save Folder Path: " + saveFolderPath);
-            
-            FileSystemUtilities.WriteTextFileContents(saveDataJSON, saveFolderPath, saveFileName);
+          
+            FileSystemUtilities.WriteTextFileContents(m_SaveFilePath, saveDataJSON);
             
             Debug.Log("Saving successful!");
         }
@@ -133,7 +136,7 @@ namespace Project1
 
             loading = true;
 
-            string saveDataJSON = FileSystemUtilities.ReadTextFileContents(saveFolderPath, saveFileName);
+            string saveDataJSON = FileSystemUtilities.GetTextFromFile(m_SaveFilePath);
             m_SaveData = JsonUtility.FromJson<SaveData>(saveDataJSON);
 
             StartCoroutine(m_SceneControllerInstance.TransitionSaveFile(m_SaveData, m_Player));

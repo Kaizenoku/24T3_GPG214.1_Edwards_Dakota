@@ -3,18 +3,18 @@ using UnityEditor;
 namespace DakotaLib
 {
     // Only apply to "StreamingAssetLoader" or derived classes
-    [CustomEditor(typeof(StreamingAssetLoader), true)]
+    [CustomEditor(typeof(StreamingAssetLoaderWrapper), true)]
     public class StreamingAssetEditor : Editor
     {
-        SerializedProperty assetFilePath;
         SerializedProperty streamingAsset;
+        SerializedProperty streamingAssetFilePath;
 
         private const string m_StreamingAssetPrefix = "Assets/StreamingAssets/";
 
 
         void OnEnable()
         {
-            assetFilePath = serializedObject.FindProperty("m_AssetFilePath");
+            streamingAssetFilePath = serializedObject.FindProperty("m_StreamingAssetFilePath");
             streamingAsset = serializedObject.FindProperty("m_StreamingAsset");
         }
 
@@ -29,17 +29,16 @@ namespace DakotaLib
             }
 
             // Get the asset path relative to the project (eg. Assets/StreamingAssets/exampleFile.txt)
-            string relativeAssetPath = AssetDatabase.GetAssetPath(streamingAsset.objectReferenceValue.GetInstanceID());
+            string assetPath = AssetDatabase.GetAssetPath(streamingAsset.objectReferenceValue.GetInstanceID());
 
             // If asset is not in Streaming Assets folder...
-            if (!relativeAssetPath.StartsWith(m_StreamingAssetPrefix))
+            if (!assetPath.StartsWith(m_StreamingAssetPrefix))
             {
                 return;
             }
         
-            // Remove the "Assets/StreamingAssets/" part of the file path, and set in StreamingAssetLoader properties
-            relativeAssetPath = relativeAssetPath.Substring(m_StreamingAssetPrefix.Length);
-            assetFilePath.stringValue = relativeAssetPath;
+            // Set in StreamingAssetLoader properties
+            streamingAssetFilePath.stringValue = assetPath;
             serializedObject.ApplyModifiedProperties();
         }
     }

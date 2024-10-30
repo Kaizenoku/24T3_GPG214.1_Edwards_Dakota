@@ -1,29 +1,16 @@
+using System.Collections;
 using UnityEngine;
 
 namespace DakotaLib
 {
-    public class StreamingSpriteLoader : StreamingAssetLoader
+    public class StreamingSpriteLoader : StreamingAssetLoader<Sprite>
     {
         [SerializeField] private SpriteRenderer m_SpriteRenderer;
         [SerializeField] private int m_PixelsPerUnit;
 
-        private void Awake()
+        public override void LoadAsset()
         {
-            // If no sprite renderer provided...
-            if (m_SpriteRenderer == null)
-            {
-                m_SpriteRenderer = GetComponent<SpriteRenderer>();
-            }
-
-            if (m_SpriteRenderer != null)
-            {
-                LoadAsset();
-            }
-        }
-
-        private void LoadAsset()
-        {
-            Sprite sprite = StreamingAssetUtilities.GetSpriteFromFile(m_AssetFilePath, PixelsPerUnit: m_PixelsPerUnit);
+            Sprite sprite = FileSystemUtilities.GetSpriteFromFile(m_AssetFilePath, PixelsPerUnit: m_PixelsPerUnit);
 
             // If sprite is null...
             if (sprite == null)
@@ -33,6 +20,40 @@ namespace DakotaLib
 
             // Set sprite of sprite renderer
             m_SpriteRenderer.sprite = sprite;
+        }
+
+        public override IEnumerator LoadAssetAsync()
+        {
+            coroutineRunning = true;
+
+            yield return FileSystemUtilities.GetSpriteFromFileAsync(OnAssetLoaded, m_AssetFilePath);
+
+            coroutineRunning = false;
+        }
+
+        protected override void OnAssetLoaded(Sprite Sprite)
+        {
+            // If sprite is null...
+            if (Sprite == null)
+            {
+                return;
+            }
+
+            // Set sprite of sprite renderer
+            m_SpriteRenderer.sprite = Sprite;
+        }
+
+        protected override bool RequirementsMet()
+        {
+            bool output = true;
+
+            if (m_SpriteRenderer == null)
+            {
+                m_SpriteRenderer = GetComponent<SpriteRenderer>();
+                output = m_SpriteRenderer != null;
+            }
+
+            return output;
         }
     }
 }

@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicAudioClip: {fileID: 8300000, guid: 0651b56880a11ef45909b779443691aa, type: 3}
   loadMusicFromStreamingAssets: 1
-  streamingMusicFilePath: Audio/MusicGameplay.wav
+  streamingMusicFilePath: Audio/MusicGameplayL.wav
   streamingMusicChannels: 2
   streamingMusicFrequency: 44100
   streamingMusicBitDepth: 0
