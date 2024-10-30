@@ -125,7 +125,7 @@ namespace DakotaLib
 
         // DEPRECATED! Use GetAudioClipFromFileAsync instead
         // Returns an AudioClip from a file (Only works with .wav files)
-        public static AudioClip GetAudioClipFromFile(string FilePath, int Channels = 1, int Frequency = 44100, int BitDepth = 16, bool StreamAudio = false)
+        public static AudioClip GetAudioClipFromFile(string FilePath, int Channels = 1, int Frequency = 44100, int BitDepth = 16)
         {
             // If file doesn't exist...
             if (!File.Exists(FilePath))
@@ -159,7 +159,7 @@ namespace DakotaLib
             string fileName = Path.GetFileName(FilePath);
 
             // Create our audio clip
-            AudioClip audioClip = AudioClip.Create(fileName, fileData.Length, Channels, Frequency, StreamAudio);
+            AudioClip audioClip = AudioClip.Create(fileName, fileData.Length, Channels, Frequency, false);
             bool clipLoaded = audioClip.SetData(fileData, 0);
 
             // If clip didn't load successfully...

@@ -75,6 +75,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ddae9ef7d6cb2043a5a77f59a1d7314, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SaveFileName: 
-  m_SaveFolderPath: 
+  m_SaveFileName: Project1 SaveData
+  m_SaveFolderPath: D:/Game Dev/Repositories/24T3_GPG214.1_Edwards_Dakota/Assets/StreamingAssets
   m_Player: {fileID: 0}
